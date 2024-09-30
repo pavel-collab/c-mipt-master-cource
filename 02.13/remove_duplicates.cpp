@@ -2,16 +2,16 @@
 #include <vector>
 
 /* Doesn't remove duplicates, just move it to the end of the vector. */
-size_t not_std_uqiue(std::vector<int> *vec, size_t first, size_t last) {
+size_t not_std_uqiue(std::vector<int>& vec, size_t first, size_t last) {
     if (first == last)
         return last;
 
     size_t result = first;
     while (++first != last) {
-        if (!((*vec)[result] == (*vec)[first]) && ++result != first) { 
-            auto tmp = (*vec)[first];
-            (*vec)[first] = (*vec)[result];
-            (*vec)[result] = tmp;
+        if (!(vec[result] == vec[first]) && ++result != first) { 
+            auto tmp = vec[first];
+            vec[first] = vec[result];
+            vec[result] = tmp;
         }
     }
  
@@ -38,7 +38,7 @@ int main() {
                    V
     1 2 3 4 5 6 7 [ ] 
     */
-    auto last = not_std_uqiue(&v, 0, v.size());
+    auto last = not_std_uqiue(v, 0, v.size());
     
     std::cout << "removed duplicates:" << std::endl;
     for (size_t i = 0; i < last; i++) {

@@ -2,10 +2,10 @@
 #include <vector>
 
 // Разделение по схеме Lomuto
-int partition(std::vector<int> *vec, int start, int end)
+int partition(std::vector<int>& vec, int start, int end)
 {
     // Выбираем крайний правый элемент в качестве опорного элемента массива
-    int pivot = (*vec)[end];
+    int pivot = vec[end];
 
     // элементы, меньшие точки поворота, будут перемещены влево от `pIndex`
     // элементы больше, чем точка поворота, будут сдвинуты вправо от `pIndex`
@@ -16,22 +16,22 @@ int partition(std::vector<int> *vec, int start, int end)
     // увеличивается, и этот элемент будет помещен перед опорной точкой.
     for (int i = start; i < end; i++)
     {
-        if ((*vec)[i] <= pivot)
+        if (vec[i] <= pivot)
         {
-            std::iter_swap(vec->begin() + i, vec->begin() + pIndex);
+            std::iter_swap(vec.begin() + i, vec.begin() + pIndex);
             pIndex++;
         }
     }
 
     // поменять местами `pIndex` с пивотом
-    std::iter_swap(vec->begin() + pIndex, vec->begin() + end);
+    std::iter_swap(vec.begin() + pIndex, vec.begin() + end);
 
     // вернуть `pIndex` (индекс опорного элемента)
     return pIndex;
 }
 
 // Процедура быстрой сортировки
-void quicksort(std::vector<int> *vec, int start, int end)
+void quicksort(std::vector<int>& vec, int start, int end)
 {
     // базовое условие
     if (start >= end) {
@@ -57,7 +57,7 @@ int main() {
         v.emplace_back(tmp);
     }
 
-    quicksort(&v, 0, v.size());
+    quicksort(v, 0, v.size());
 
     for (auto el : v) {
         std::cout << el << " ";

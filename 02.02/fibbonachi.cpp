@@ -28,7 +28,7 @@ unsigned long long stupid_get_fib(unsigned long long n) {
     return stupid_get_fib(n - 1) + stupid_get_fib(n - 2);
 }
 
-unsigned long long get_fib(unsigned long long n, std::vector<unsigned long long>* save) {
+unsigned long long get_fib(unsigned long long n, std::vector<unsigned long long>& save) {
     if (n == 0)
         return 0;
     
@@ -36,17 +36,17 @@ unsigned long long get_fib(unsigned long long n, std::vector<unsigned long long>
         return 1;
     }
 
-    if ((*save)[n-2] == 0) {
-        (*save)[n-2] = get_fib(n-2, save);
+    if (save[n-2] == 0) {
+        save[n-2] = get_fib(n-2, save);
     }
 
-    if ((*save)[n-1] == 0) {
-        (*save)[n-1] = get_fib(n-1, save);
+    if (save[n-1] == 0) {
+        save[n-1] = get_fib(n-1, save);
     }
 
-    (*save)[n] = (*save)[n-2] + (*save)[n-1];
+    save[n] = save[n-2] + save[n-1];
 
-    return (*save)[n];
+    return save[n];
 }
 
 int main() {
@@ -57,5 +57,5 @@ int main() {
     // std::cout << stupid_get_fib(N) << std::endl;
 
     std::vector<unsigned long long> save(N+1, 0);
-    std::cout << get_fib(N, &save) << std::endl;
+    std::cout << get_fib(N, save) << std::endl;
 }
