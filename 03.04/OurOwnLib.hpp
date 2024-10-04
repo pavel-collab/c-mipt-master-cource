@@ -4,6 +4,9 @@
 #include "ExternalLibA.hpp"
 #include "ExternalLibB.hpp"
 
+/*
+ * Second attempt: here we use a little hack: two intermediate classes
+ */
 class FirstIntermediateParentClass: public ExternalClassA
 {
 public:
@@ -12,7 +15,7 @@ public:
     virtual short FirstIntermediateFoo() const = 0;
 
 private:
-    short foo() const {
+    short foo() const override {
         return FirstIntermediateFoo();
     }
 };
@@ -25,7 +28,7 @@ public:
     virtual short SecondIntermediateFoo() const = 0;
 
 private:
-    short foo() const {
+    short foo() const override {
         return SecondIntermediateFoo();
     }
 };
