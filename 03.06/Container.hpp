@@ -29,7 +29,7 @@ namespace MyVector
 
         Container(std::size_t capacity) : m_size(0), m_capacity(capacity)
         {
-            std::cout << "Container::Container (direct initialisation)" << std::endl;
+            std::cout << "Container::Container (default initialisation)" << std::endl;
 
             m_data = new int[m_capacity]{};
             assert(m_data != nullptr);
@@ -53,11 +53,40 @@ namespace MyVector
             swap(other);
         }
 
-        Container& operator=(Container other)
+        Container & operator=(const Container & other) // bad
         {
-            std::cout << "Container::operator= (swap)" << std::endl;
+            std::cout << "Container::operator= (copy)" << std::endl;
 
-            swap(other);
+            if (this != &other)
+            {
+                auto new_size = other.m_size;
+
+                auto new_data = (new_size ? new int[new_size]{} : nullptr);
+
+                std::copy(other.m_data, other.m_data + m_size, m_data);
+
+                delete[] m_data;
+
+                m_data = new_data;
+                m_size = new_size;
+            }
+
+            return *this;
+        }
+
+        Container & operator=(Container && other) // bad
+        {
+            std::cout << "Container::operator= (move)" << std::endl;
+
+            if (this != &other)
+            {
+                if (m_data) delete[] m_data;
+                
+                m_data = other.m_data;
+                m_size = other.m_size;
+
+                other.m_data = nullptr; other.m_size = 0;
+            }
 
             return *this;
         }
@@ -109,7 +138,7 @@ namespace MyVector
 
         const std::size_t capacity() const { return m_capacity; }
 
-        bool eampty() const { return m_size == 0 ? true : false; }
+        bool empty() const { return m_size == 0 ? true : false; }
 
         //??????????
         void clear() {
@@ -120,9 +149,18 @@ namespace MyVector
         void push_back(int new_val) {
             if (m_size == m_capacity)
             {
-                m_data = (int*) realloc(m_data, m_capacity * 2);
-                assert(m_data != NULL);
+                int* new_data_ptr = new int[m_capacity * 2]{};
+                assert(new_data_ptr != nullptr);
+
+                // copy data
+                std::memcpy(new_data_ptr, m_data, m_size);
+
+                // swap pointers
+                std::swap(m_data, new_data_ptr);
                 m_capacity = m_capacity * 2;
+
+                // free old memory
+                delete [] new_data_ptr;
             }  
             m_data[m_size++] = new_val;
         }
