@@ -153,7 +153,7 @@ namespace MyVector
                 assert(new_data_ptr != nullptr);
 
                 // copy data
-                std::memcpy(new_data_ptr, m_data, m_size);
+                std::memcpy(new_data_ptr, m_data, m_size*sizeof(int));
 
                 // swap pointers
                 std::swap(m_data, new_data_ptr);
