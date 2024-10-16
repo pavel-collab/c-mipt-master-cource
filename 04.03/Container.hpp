@@ -17,7 +17,8 @@
 #include <cstring>
 
 namespace MyVector 
-{
+{  
+    template <typename T>
     class Container
     {
     public:
@@ -31,7 +32,7 @@ namespace MyVector
         {
             std::cout << "Container::Container (default initialisation)" << std::endl;
 
-            m_data = new int[m_capacity]{};
+            m_data = new T[m_capacity]{};
             assert(m_data != nullptr);
         }
 
@@ -40,7 +41,7 @@ namespace MyVector
         {
             std::cout << "Container::Container (copy)" << std::endl;
 
-            m_data = new int[m_capacity]{};
+            m_data = new T[m_capacity]{};
 
             std::copy(other.m_data, other.m_data + m_size, m_data);
         }
@@ -61,7 +62,7 @@ namespace MyVector
             {
                 auto new_size = other.m_size;
 
-                auto new_data = (new_size ? new int[new_size]{} : nullptr);
+                auto new_data = (new_size ? new T[new_size]{} : nullptr);
 
                 std::copy(other.m_data, other.m_data + m_size, m_data);
 
@@ -99,7 +100,7 @@ namespace MyVector
         }
 
         // call for non const object, can modify internal m_data
-        int& operator[](const int idx)
+        T& operator[](const int idx)
         {
             assert(idx >= 0);
             assert(idx < m_capacity);
@@ -107,7 +108,7 @@ namespace MyVector
         }
 
         // call for constant objects, only for show internal data
-        const int& operator[](const int idx) const
+        const T& operator[](const int idx) const
         {
             assert(idx >= 0);
             assert(idx < m_capacity);
@@ -115,22 +116,22 @@ namespace MyVector
         }
 
         // call for non const container, let modify the first data cell
-        int& front() {
+        T& front() {
             return m_data[0]; 
         }
 
         // call for const objects, don't let modify data
-        const int& front() const {
+        const T& front() const {
             return m_data[0]; 
         }
 
         // call for non const container, let modify the last data cell
-        int& back() {
+        T& back() {
             return m_data[m_capacity - 1]; 
         }
 
         // call for const objects, don't let modify data
-        const int& back() const {
+        const T& back() const {
             return m_data[m_capacity - 1]; 
         }
 
@@ -146,14 +147,14 @@ namespace MyVector
             m_size = 0;
         }
 
-        void push_back(int new_val) {
+        void push_back(T new_val) {
             if (m_size == m_capacity)
             {
-                int* new_data_ptr = new int[m_capacity * 2]{};
+                T* new_data_ptr = new T[m_capacity * 2]{};
                 assert(new_data_ptr != nullptr);
 
                 // copy data
-                std::memcpy(new_data_ptr, m_data, m_size*sizeof(int));
+                std::memcpy(new_data_ptr, m_data, m_size*sizeof(T));
 
                 // swap pointers
                 std::swap(m_data, new_data_ptr);
@@ -178,7 +179,7 @@ namespace MyVector
 
     private:
 
-        int* m_data; 
+        T* m_data; 
         std::size_t m_size;
         std::size_t m_capacity;
 
@@ -186,7 +187,8 @@ namespace MyVector
 
     //  ================================================================================================
 
-    inline void swap(Container & x, Container & y) { x.swap(y); }
+    template <typename T>
+    inline void swap(Container<T> & x, Container<T> & y) { x.swap(y); }
 
     //  ================================================================================================
 }
