@@ -3,51 +3,50 @@
 
 #include <functional>
 
-//TODO: add namespace
-//TODO: move forward, backword functions to namespace
+namespace scope_guard {
 
-template <typename BackwardAction, typename ForwardAction>
-//todo: rafector name of the class
-class scope_guard
-{
-private:
-    std::function<BackwardAction> backward_;
-    std::function<ForwardAction> act_;
-
-    //todO: REFACTOR names
-    bool backward_flag_;
+template <typename ActionT, typename BackwardT>
+class ScopeGuard {
 
 public:
-    scope_guard (BackwardT *backward, ActionT *act)
-      : backward_ (backward), act_ (act), backward_flag_ (true) {}
+    ScopeGuard(BackwardT* backward, ActionT* act)
+        : m_backward(backward)
+        , m_action(act)
+        , m_backward_flag(true)
+    {
+    }
 
     //? What about rule of 5? Copy constructor, copy assignment, move constructor, move assignment
 
-    ~scope_guard ()
+    ~ScopeGuard()
     {
-        if (!backward_flag_)
+        if (!m_backward_flag)
             return;
 
-        try
-        {
-            backward_ ();
+        try {
+            backward_();
+        } catch (...) { /* Ignore it.  */
         }
-        catch (...) { /* Ignore it.  */ }
     }
 
-    void exec ()
+    void exec()
     {
-        try
-        {
-            act_ ();
+        try {
+            act_();
             /* If we're here then exception not happenned.  */
-            backward_flag_ = false;
-        }
-        catch (...)
-        {
+            m_backward_flag = false;
+        } catch (...) {
             /* Backward will happen.  */
         }
     }
+
+private:
+    std::function<BackwardAction> m_backward;
+    std::function<Action> m_action;
+
+    bool m_backward_flag;
 };
+
+}
 
 #endif // _SCOPE_GUARD_H_

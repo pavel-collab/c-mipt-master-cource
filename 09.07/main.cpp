@@ -2,7 +2,8 @@
 
 #include "binary_tree.hpp"
 
-int main() {
+int main()
+{
     BinaryTree tree;
     tree.insert(10);
     tree.insert(5);

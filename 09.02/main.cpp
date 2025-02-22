@@ -4,7 +4,7 @@
 #include "logger.hpp"
 
 int main() {
-    logger::Logger logger("log.txt");  // Создаем объект Logger, который открывает файл
+    logger::Logger logger("logfile.log");  // Создаем объект Logger, который открывает файл
 
     logger.log("Starting the program");
 
