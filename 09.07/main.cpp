@@ -4,7 +4,7 @@
 
 int main()
 {
-    BinaryTree<int> tree;
+    tree::BinaryTree<int> tree;
 
     tree.insert(10);
     tree.insert(5);
