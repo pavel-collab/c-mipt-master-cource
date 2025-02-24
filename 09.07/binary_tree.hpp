@@ -5,6 +5,9 @@
 #include <memory>
 
 template <typename T>
+class BinaryTree;
+
+template <typename T>
 class Node {
     public:
 
@@ -13,8 +16,10 @@ class Node {
     {
     }
 
-    //! По-хорошему все эти функии должны быть friend для класса Tree, 
-    //! потому что мы не тащим этот интерфейс пользователю. Он не должен быть publick
+    template <typename U>
+    friend class BinaryTree;
+
+    private:
 
     T getValue()
     {
@@ -51,8 +56,6 @@ class Node {
         m_parent = parent;
     }
 
-    private:
-
     T m_value;
     std::shared_ptr<Node> m_left;
     std::shared_ptr<Node> m_right;
@@ -66,7 +69,7 @@ public:
     void insert(int value)
     {
         if (!root) {
-            root = std::make_shared<Node<T>>(value);
+            root = std::make_shared<Node<T> >(value);
         } else {
             insertHelper(root, value);
         }
@@ -79,18 +82,18 @@ public:
     }
 
 private:
-    void insertHelper(std::shared_ptr<Node<T>> node, int value)
+    void insertHelper(std::shared_ptr<Node<T> > node, int value)
     {
         if (value < node->getValue()) {
             if (!node->getLeftChild()) {
-                node->bindLeftChild(std::make_shared<Node<T>>(value));
+                node->bindLeftChild(std::make_shared<Node<T> >(value));
                 node->getLeftChild()->bindParent(node);
             } else {
                 insertHelper(node->getLeftChild(), value);
             }
         } else {
             if (!node->getRightChild()) {
-                node->bindRightChild(std::make_shared<Node<T>>(value));
+                node->bindRightChild(std::make_shared<Node<T> >(value));
                 node->getRightChild()->bindParent(node);
             } else {
                 insertHelper(node->getRightChild(), value);
@@ -98,7 +101,7 @@ private:
         }
     }
 
-    void inorderHelper(std::shared_ptr<Node<T>> node) const
+    void inorderHelper(std::shared_ptr<Node<T> > node) const
     {
         if (!node)
             return;
@@ -107,7 +110,7 @@ private:
         inorderHelper(node->getRightChild());
     }
 
-    std::shared_ptr<Node<T>> root;
+    std::shared_ptr<Node<T> > root;
 };
 
 #endif // _BINARY_TREE_H
