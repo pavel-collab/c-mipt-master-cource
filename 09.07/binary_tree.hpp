@@ -16,6 +16,8 @@ class Node {
     //! По-хорошему все эти функии должны быть friend для класса Tree, 
     //! потому что мы не тащим этот интерфейс пользователю. Он не должен быть publick
 
+    //! This class is not RAII, cz smart pointers manage their resources by themselves
+
     T getValue()
     {
         return m_value;
@@ -59,6 +61,7 @@ class Node {
     std::weak_ptr<Node> m_parent;
 };
 
+//? Is it a RAII?
 template <typename T>
 class BinaryTree {
 public:
