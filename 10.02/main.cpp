@@ -31,7 +31,8 @@ float test_1() {
 
 /*
 В случае, когда память резервируется вручную вектор заполняется ровно до размера, который мы задали.
-Далее происходит реаллокация, память увеличивается в 2 раза.
+Далее происходит реаллокация, память увеличивается в 2 раза. Отличие данного случая от первого заключается лишь в том,
+что вектор реаллоцирует память не сразу, а в тот момент, когда зарезервированная память заполнится значениями.
 */
 float test_2() {
     std::cout << "Test capacity factor check after reservatoion" << std::endl << std::endl;
@@ -54,23 +55,16 @@ float test_2() {
     return factor;
 }
 
+/*
+В случае, когда вектор резервирует больше памяти, чем может выделить операционная система, конструктор кидает
+исключение std::bad_alloc. Происходит раскрутка стека и завершение программы без утечки памяти.
+*/
 void test_3() {
-    std::vector<double> test_vector;
-
     try
     {
-        test_vector.reserve(1'000'000'000);
-        for (long _ = 0; _ < test_vector.capacity(); _++) {test_vector.push_back(0);};
-
-        while (1) {
-            if (test_vector.capacity() % 1'000'000'000 == 0) {
-                std::cout << "vector capacity is " << test_vector.capacity() << std::endl;
-            }
-            test_vector.push_back(0);
-        }
-    }
-    catch(const std::bad_alloc& e)
-    {   std::cout << "test vector capacity is " << test_vector.capacity() << std::endl;
+        std::vector<double> test_vector (1'000'000'000'000);
+    } catch(const std::bad_alloc& e)
+    {
         std::cerr << e.what() << '\n';
     }
 }
