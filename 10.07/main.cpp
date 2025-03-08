@@ -40,7 +40,7 @@ int main(int argc, char* argv[])
     std::unordered_map<std::string, unsigned int> hash_function_collisions;
     std::unordered_map<unsigned int, unsigned int> hash_distribution;
 
-    std::string collision_file_name = "./data/collisions_" + std::to_string(string_len) + ".txt";
+    std::string collision_file_name = "./data/collisions_" + std::to_string(string_len) + ".csv";
     std::string function_file_name;
 
     const std::unordered_map<std::string, unsigned int (*)(const char* str, unsigned int length)>
@@ -73,7 +73,7 @@ int main(int argc, char* argv[])
         
         hash_function_collisions.insert({func.first, collision_number});
 
-        function_file_name = "./data/" + func.first + "_" + std::to_string(string_len) + "_distribution.txt";
+        function_file_name = "./data/" + func.first + "_" + std::to_string(string_len) + "_distribution.csv";
         umap2file(hash_distribution, function_file_name.c_str());
     }
     collisions2file(hash_function_collisions, collision_file_name.c_str());

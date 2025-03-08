@@ -15,8 +15,9 @@ void umap2file(std::unordered_map<unsigned int, unsigned int>& hash_distribution
         return; 
     }
 
+    outputFile << "values,hits" << std::endl;
     for (const auto& pair : hash_distribution) {
-        outputFile << pair.first << ": " << pair.second << std::endl;
+        outputFile << pair.first << "," << pair.second << std::endl;
     }
 
     outputFile.close();
@@ -31,8 +32,9 @@ void collisions2file(std::unordered_map<std::string, unsigned int> hash_collisio
         return; 
     }
 
+    outputFile << "hashes,collisions" << std::endl;
     for (const auto& pair : hash_collisions) {
-        outputFile << pair.first << ": " << pair.second << std::endl;
+        outputFile << pair.first << "," << pair.second << std::endl;
     }
 
     outputFile.close();

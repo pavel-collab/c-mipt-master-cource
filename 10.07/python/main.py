@@ -1,12 +1,10 @@
+from utils import *
+
 import argparse
 import seaborn as sns
 import matplotlib.pyplot as plt
 import pandas as pd
 from pathlib import Path
-import re 
-import os
-
-#TODO: make all of the files from txt to csv and use dataframes directly 
 
 parser = argparse.ArgumentParser()
 
@@ -16,49 +14,11 @@ parser.add_argument('-H', '--hashes', help='plot hash functios comparision bars'
 
 args = parser.parse_args()
 
-collision_pattern = re.compile('collisions_[0-9]+.txt')
-hash_pattern = re.compile('[a-z,A-Z,0-9]+_[0-9]+_distribution.txt')
-
-def find_all_collision_file_data(data_path: str):
-    collision_data_file_list = [f for f in os.listdir(data_path) if collision_pattern.match(f)]
-    collision_files = {}
-    for file in collision_data_file_list:
-        string_len = int(file[len('collisions_'):].removesuffix('.txt'))
-        collision_files[file] = string_len
-    return collision_files
-
-def extract_hash_name(file_name: str):
-    string_len = int(re.findall('_[0-9]+_', file_name)[0][1:].removesuffix('_'))
-    hash_name = file_name.removesuffix(f"_{string_len}_distribution.txt")
-    return hash_name
-
-def find_all_hf_data_files(data_path: str):
-    hash_data_files = [f for f in os.listdir(data_path) if hash_pattern.match(f)]
-    hash_files_by_string_len = {}
-
-    for file in hash_data_files:
-        string_len = int(re.findall('_[0-9]+_', file)[0][1:].removesuffix('_'))
-
-        if string_len in hash_files_by_string_len.keys():
-            hash_files_by_string_len[string_len].append(file)
-        else:
-            hash_files_by_string_len[string_len] = [file]
-    
-    return hash_files_by_string_len
-
-def plot_hash_comparision(hash_collisions: dict, string_len: int):
-    #? may be we can do it by some interface function?
-    df = pd.DataFrame(
-        {
-            'Hashes' : hash_collisions.keys(),
-            'collisions' : hash_collisions.values()
-        }
-    )
-    
+def plot_hash_comparision(hash_collisions, string_len: int):
     fig = plt.figure()
     plt.title(f"Hash functions collisions on {string_len} string len")
 
-    sns.barplot(x='Hashes', y='collisions', data=df)
+    sns.barplot(x='hashes', y='collisions', data=hash_collisions)
 
     plt.xlabel('hash function name')
     plt.ylabel('collision number')
@@ -82,11 +42,24 @@ def main():
         return
     
     data_path = Path(args.file_path)
+
     if not data_path.exists() or not data_path.is_dir():
         print(f"[err] there are problems with {data_path.absolute()} (may be it's not exists)")
 
-    collision_files = find_all_hf_data_files(data_path=data_path.absolute())
-    print(collision_files)
+    if args.distribution:
+        ...
+
+    if args.hashes:
+        collision_files = find_all_collision_file_data(data_path=data_path.absolute())
+
+        for data_file, str_len in collision_files.items():
+            file_path = Path(f"{data_path}/{data_file}")
+            
+            print(f"[DEBUG] {file_path.absolute()}")
+            assert(file_path.exists())
+
+            df = pd.read_csv(file_path.absolute())
+            plot_hash_comparision(df, str_len)
 
 if __name__ == '__main__':
     main()
