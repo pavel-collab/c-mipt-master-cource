@@ -21,7 +21,7 @@ unsigned int get_collision_number(std::unordered_map<unsigned int, unsigned int>
     unsigned int result = 0;
     for (const auto& pair : hash_distriobution) {
         if (pair.second > 1)
-            result++;
+            result += pair.second - 1;
     }
     return result;
 }
