@@ -32,8 +32,8 @@ def plot_hash_distribution(hash_name: str, string_len: int, dataframe1, datafram
     plt.title(f"Distribution for hash {hash_name}")
 
     #? may be use here smth except of barplot
-    sns.barplot(x='values', y='hits', data=dataframe1, color='blue')
-    sns.barplot(x='values', y='hits', data=dataframe2, color='red')
+    sns.scatterplot(x='values', y='hits', data=dataframe1, color='blue', size=15)
+    sns.scatterplot(x='values', y='hits', data=dataframe2, color='red', size=15)
     plt.ylabel('hit humber')
     plt.xticks([]) 
 
@@ -51,7 +51,7 @@ def main():
 
         #TODO: refactor variables names
         df = pd.read_csv(file_path.absolute())
-        df = filter_dataset(df, n=10)
+        df = filter_dataset(df, n=2)
         df1, df2 = split_df_by_value(df)
         
         plot_hash_distribution(hash_name, string_len, df1, df2)
