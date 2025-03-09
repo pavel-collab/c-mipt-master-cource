@@ -1,5 +1,7 @@
 import os
 import re
+import gc
+import pandas as pd
 
 collision_pattern = re.compile('collisions_[0-9]+.csv')
 hash_pattern = re.compile('[a-z,A-Z,0-9]+_[0-9]+_distribution.csv')
@@ -30,3 +32,11 @@ def find_all_hf_data_files(data_path: str):
             hash_files_by_string_len[string_len] = [file]
     
     return hash_files_by_string_len
+
+def clear_mem() -> None:
+    gc.collect()
+    # torch.cuda.empty_cache()
+
+def filter_dataset(df, n: int):
+    filterd_df = df.drop(df.index[n-1::n])
+    return filterd_df
