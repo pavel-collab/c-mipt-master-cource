@@ -2,39 +2,41 @@
 #include <vector>
 #include <string>
 #include <iterator>
+#include <sstream>
+#include <cctype> // Для функции isalpha
 
 template <typename Iterator>
-std::string concatenate_with_separator(Iterator begin, Iterator end, 
-                                       const std::string& separator)
+std::string concat(Iterator begin, Iterator end, const std::string& sep)
 {
-    std::string result;
-
+    std::ostringstream oss;
+    
     if (begin != end)
     {
-        result += *begin;
+        oss << *begin;
         ++begin;
 
         while (begin != end)
         {
-            result += separator;
-            result += *begin;
+            if (std::isalpha(*begin))
+            {
+                oss << sep;
+            }
+            oss << *begin;
             ++begin;
         }
     }
 
-    return result;
+    return oss.str();
 }
 
 int main()
 {
-    std::vector<std::string> strings = {"/home", "dfrolov", "cpp_masters_course", "second_sem", __FILE__};
-    std::string separator = "/";
+    std::vector<std::string> strings = {"one", "two", "three", "42"};
+    std::string separator = "*";
 
-    std::string result = concatenate_with_separator(
+    std::string result = concat(
         strings.begin(), strings.end(), separator);
-    std::cout << "Concatenated string: " << result << std::endl;
+    std::cout << "Result: " << result << std::endl;
 
     return 0;
 }
-
-

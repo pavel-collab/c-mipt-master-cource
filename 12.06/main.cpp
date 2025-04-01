@@ -5,47 +5,44 @@
 
 bool is_separator(char ch)
 {
-    static std::unordered_set<char> separators = {' ', '\n', '\t', ';'};
-
+    static std::unordered_set<char> separators = {' ', '\n', '\t', ';', '.', ',', '!', '?', ':', '-', '/', '\\', '(', ')', '[', ']', '{', '}', '<', '>', '@', '#', '$', '%', '^', '&', '*', '~', '`', '+', '=', '|', '"', '\''};
     return separators.find(ch) != separators.end();
 }
 
-std::string capitalize_words(const std::string& str)
+std::string process_scentence(const std::string& str)
 {
-    std::string result;
-    bool new_word = true;
+    std::string res;
+    bool next_word = true;
 
     for (char ch : str)
     {
         if (is_separator(ch))
         {
-            result += ch;
-            new_word = true;
+            res += ch;
+            next_word = true;
         }
         else
         {
-            if (new_word)
+            if (next_word)
             {
-                result += std::toupper(ch);
-                new_word = false;
+                res += std::toupper(ch);
+                next_word = false;
             }
             else
-                result += std::tolower(ch);
+                res += std::tolower(ch);
         }
     }
 
-    return result;
+    return res;
 }
 
 int main()
 {
-    std::string text = "heLLo, \twoRLD\nwelcome to the world;heNCe$, we are free to work with ';' sign";
-    std::string result = capitalize_words(text);
+    std::string text = "привет, мир\nдобро пожаловать в мир; вот так, мы можем работать с ';' символом";
+    std::string result = process_scentence(text);
 
-    std::cout << "Original text: " << text << std::endl;
-    std::cout << "Formatted text: " << result << std::endl;
+    std::cout << "Исходный текст: " << text << std::endl;
+    std::cout << "Отформатированный текст: " << result << std::endl;
 
     return 0;
 }
-
-
